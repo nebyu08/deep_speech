@@ -1,14 +1,18 @@
 import numpy as np
 from dataclasses import dataclass
-
+from hidden import Layers
 
 class RNN():
-    def __init__(self,n_layer,
-                 n_neuron,
-                 ):
+    def __init__(self
+                 ,n_layers
+                 ,layers:Layers
+                 ) -> None:
         
-        self.n_layer=n_layer
-        self.n_neuron=n_neuron
+        self.n_layers=n_layers
+        self.layers=layers
 
-    def forward():
-        
+    
+    def forward(self,inputs):
+
+        self.outputs=[]
+        for i in range(self.n_layers):
