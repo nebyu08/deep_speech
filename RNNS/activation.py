@@ -13,6 +13,6 @@ class Tanh:
     def forward(self,x):
         return np.tanh(x)
     
-    def backward(self,x):
-        return 1-np.square(np.tanh(x))
+    def backward(self,x,dif_st):
+        return (1-np.square(np.tanh(x)))*dif_st
     

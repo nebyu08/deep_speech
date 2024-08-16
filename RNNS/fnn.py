@@ -1,14 +1,15 @@
 import numpy as np
 from activation import Softmax,Tanh
 
-softmax=Softmax()
-tanh=Tanh()
-
 class RNN:
+    """
+        this is a simple architecture of RNN implemented using python
+    """
+
     def __init__(self) -> None:
 
         #initialize the activation functions
-        self.softmax=Softmax()
+        #self.softmax=Softmax()
         self.tanh=Tanh()
 
     def forward(self,U,W,V,B,C,prev,X):
@@ -18,23 +19,24 @@ class RNN:
         self.x=X
 
         self.st=np.matmul(prev,W)+np.matmul(X,U)+B
-        self.at=tanh.forward(self.st)   #this is the output hidden layer
+        self.at=self.tanh.forward(self.st)   #this is the output hidden layer
         self.ot=np.matmul(V,self.at)+C
-        self.pred=softmax.forward(self.ot)
-        return self.pred
+        #self.pred=softmax.forward(self.ot)  #turn into probabilities
+        return self.ot,self.at    #raw logits & hidden unit
     
-    def backward(self,actual,d_prev):
-        self.dl_actua=-actual/self.pred
-        self.dl_do=self.pred-actual
+    def backward(self,actual,pred,d_prev):
+        self.dl_actua=-actual/pred
+        self.dl_do=pred-actual
         self.dl_dv=self.dl_do*self.at
         self.dl_dc=self.dl_do
 
         #the section where the current and previous layer connect
         self.dl_at=self.dl_do*self.v + d_prev*self.w
-        self.dl_st=self.dl_at*self.tanh.backward(self.st)
+        self.dl_st=self.tanh.backward(self.st,self.dl_at)
 
         self.dl_dw=self.dl_st*self.prev_a
         self.dl_du=self.dl_st*self.x
         self.dl_db=self.dl_st
 
+        return self.dl_dw,self.dl_du,self.dl_db,self.dl_dv,self.dl_dc
     
