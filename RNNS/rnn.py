@@ -9,7 +9,7 @@ class RNN:
     def __init__(self) -> None:
 
         #initialize the activation functions
-        #self.softmax=Softmax()
+        self.softmax=Softmax()
         self.tanh=Tanh()
 
     def forward(self,U,W,V,B,C,prev,X):
@@ -25,7 +25,7 @@ class RNN:
         return self.ot,self.at    #raw logits & hidden unit
     
     def backward(self,actual,pred,d_prev):
-        self.dl_actua=-actual/pred
+        self.dl_actua=self.softmax.backward(actual,pred)
         self.dl_do=pred-actual
         self.dl_dv=self.dl_do*self.at
         self.dl_dc=self.dl_do

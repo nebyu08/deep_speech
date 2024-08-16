@@ -1,6 +1,6 @@
 import numpy as np
 from loss import Loss
-from fnn import RNN
+from RNNS.rnn import RNN
 from activation import Softmax
 
 class Model:
@@ -20,18 +20,18 @@ class Model:
         self.loss=Loss()
 
         #for building the neural network
-        self.rnns=[]
+        # self.rnns=[]
 
-        #lets connect multiple layer of rnns
-        for _ in range(n_layers):
-            self.rnns.append(self.rnn)
+        # #lets connect multiple layer of rnns
+        # for _ in range(n_layers):
+        #     self.rnns.append(self.rnn)
         
     def forward(self,inputs):
         self.prev=np.zeros_like(self.W)  #at-1
         self.preds=[]  #for accumulation
 
         for i in range(len(self.rnns)):
-            self.logits,self.h=self.rnn[i].forward(self.u,self.W,self.W,self.B,self,self.W,inputs)
+            self.logits,self.h=self.rnn[i].forward(self.U,self.W,self.W,self.B,self,self.W,inputs)
             self.probs=self.softmax(self.logits)
             self.prev=self.h
             
@@ -39,5 +39,11 @@ class Model:
             self.preds.append(np.argmax(self.probs))
 
         return self.preds
+    
+    def cal_loss(self,true_val,pred_val):   #loss value of single preds
+        return true_val-pred_val
 
-    def backward(self):
+    def backward(self,true_label):
+        #backprop across layers starting from the last RNN block
+        for i in range(reversed(self.rnns)):
+            self.rnns[i].backward(true_label[i],self.preds[i])
