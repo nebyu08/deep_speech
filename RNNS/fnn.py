@@ -1,18 +1,22 @@
 import numpy as np
-from dataclasses import dataclass
-from hidden import Layers
+from activation import Softmax
 
-class RNN():
-    def __init__(self
-                 ,n_layers
-                 ,layers:Layers
-                 ) -> None:
-        
-        self.n_layers=n_layers
-        self.layers=layers
+softmax=Softmax()
 
+
+class RNN:
+    def forward(self,U,W,V,B,C,prev,X):
+        self.st=np.matmul(prev,W)+np.matmul(X,U)+B
+        self.at=np.tanh(self.st)   #this is the output hidden layer
+        self.ot=np.matmul(V,self.at)+C
+        self.pred=softmax.forward(self.ot)
+        return self.pred
     
-    def forward(self,inputs):
+    def backward(self,actual,d_prev):
+        self.dl_actua=-actual/self.pred
+        self.dl_do=self.pred-actual
+        self.dl_dv=self.dl_do*self.at
+        self.dl_dc=self.dl_do
 
-        self.outputs=[]
-        for i in range(self.n_layers):
+        #the section where the current and previous layer connect
+        
