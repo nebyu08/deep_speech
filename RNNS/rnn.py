@@ -6,21 +6,24 @@ class RNN:
         this is a simple architecture of RNN implemented using python
     """
 
-    def __init__(self) -> None:
+    def __init__(self,n_inputs,embd_dim) -> None:
+        #initialize the learnable parameters
+        self.W=np.random.uniform(n_inputs,embd_dim)
+        self.U=np.random.uniform(n_inputs,embd_dim)
+        self.B=np.random.uniform(n_inputs,embd_dim)
+        self.V=np.random.uniform(n_inputs,embd_dim)
+        self.C=np.random.uniform(n_inputs,embd_dim)
 
         #initialize the activation functions
-        self.softmax=Softmax()
         self.tanh=Tanh()
 
-    def forward(self,U,W,V,B,C,prev,X):
-        self.w=W
-        self.v=V
+    def forward(self,prev,X):
         self.prev_a=prev
         self.x=X
 
-        self.st=np.matmul(prev,W)+np.matmul(X,U)+B
+        self.st=np.matmul(prev,self.W)+np.matmul(X,self.U)+self.B
         self.at=self.tanh.forward(self.st)   #this is the output hidden layer
-        self.ot=np.matmul(V,self.at)+C
+        self.ot=np.matmul(self.V,self.at)+self.C
         #self.pred=softmax.forward(self.ot)  #turn into probabilities
         return self.ot,self.at    #raw logits & hidden unit
     
