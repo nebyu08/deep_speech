@@ -17,4 +17,5 @@ class Model:
         self.activation=Softmax()
         self.loss=Loss()
         
-    def forward(self,inputs):   
+    def forward(self,inputs):
+        
