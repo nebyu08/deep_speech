@@ -24,9 +24,9 @@ class RNN:
         #self.pred=softmax.forward(self.ot)  #turn into probabilities
         return self.ot,self.at    #raw logits & hidden unit
     
-    def backward(self,actual,pred,d_prev):
-        self.dl_actua=self.softmax.backward(actual,pred)
-        self.dl_do=pred-actual
+    def backward(self,d_softmax,d_loss,d_prev):
+        self.dl_actua=d_softmax
+        self.dl_do=d_loss
         self.dl_dv=self.dl_do*self.at
         self.dl_dc=self.dl_do
 
@@ -38,5 +38,5 @@ class RNN:
         self.dl_du=self.dl_st*self.x
         self.dl_db=self.dl_st
 
-        return self.dl_dw,self.dl_du,self.dl_db,self.dl_dv,self.dl_dc
+        return self.dl_dw,self.dl_du,self.dl_db,self.dl_dv,self.dl_dc,self.dl_at
     

@@ -43,7 +43,19 @@ class Model:
     def cal_loss(self,true_val,pred_val):   #loss value of single preds
         return true_val-pred_val
 
-    def backward(self,true_label):
-        #backprop across layers starting from the last RNN block
+    def backward(self,true_label):        
+        #lets initialize the gradients
+        self.dl_dw=[]
+        self.dl_wu=[]
+        self.dl_db=[]
+        self.dl_dv=[]
+        self.dl_dc=[]
+        self.dl_at=[]  #must increment inorder to use
+
         for i in range(reversed(self.rnns)):
-            self.rnns[i].backward(true_label[i],self.preds[i])
+            self.dl_dw[i],self.dl_du[i],self.dl_db[i],self.dl_dv[i],self.dl_dc[i],self.dl_at[i]=self.rnns[i].backward(self.softmax.backward(true_label[i],
+                                                                                                                              self.preds[i]),
+                                  self.loss(true_label[i],self.preds[i]))   #the last element returend is THE gradient
+    
+    def update_param(self):
+        
