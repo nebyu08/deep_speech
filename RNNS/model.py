@@ -18,4 +18,3 @@ class Model:
         self.loss=Loss()
         
     def forward(self,inputs):
-        
