@@ -20,7 +20,7 @@ class Model:
         self.preds=[]  #for accumulation
 
         for i in range(len(self.rnns)):
-            self.logits,self.h=self.rnns[i].forward(self.U,self.W,self.W,self.B,self,self.W,inputs)
+            self.logits,self.h=self.rnns[i].forward(self.prev,inputs)
             self.probs=self.softmax(self.logits)
             self.prev=self.h
             
