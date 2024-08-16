@@ -18,3 +18,6 @@ class Model:
         self.loss=Loss()
         
     def forward(self,inputs):
+        self.prev=np.zeros_like(self.W)
+        self.st=self.rnn.forward(self.u,self.W,self.W,self.B,self,self.W)
+        self.

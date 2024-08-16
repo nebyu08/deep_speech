@@ -13,6 +13,6 @@ def data_model():
         char_encode=np.zeros(26)
         char_encode[i]=1
         index_embed.append(char_encode)
-    return index_embed
+    return index_embed  
 
 print(data_model())

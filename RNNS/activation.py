@@ -8,3 +8,11 @@ class Softmax:
     
     def backward(actual,pred):  
         return pred-actual
+
+class Tanh:
+    def forward(self,x):
+        return np.tanh(x)
+    
+    def backward(self,x):
+        return 1-np.square(np.tanh(x))
+    
