@@ -1,6 +1,6 @@
 import numpy as np
 from loss import Loss
-from RNNS.rnn import RNN
+from rnn import RNN
 from activation import Softmax
 
 class Model:
@@ -27,7 +27,7 @@ class Model:
             #extract the most likely model predict
             self.preds.append(np.argmax(self.probs))
 
-        return self.preds
+        return self.preds   
     
     def cal_loss(self,true_value):   #loss value of single preds
         return self.loss(self.preds,true_value)
@@ -45,7 +45,7 @@ class Model:
         for i in range(reversed(self.rnns)):
             self.dl_dw[i],self.dl_du[i],self.dl_db[i],self.dl_dv[i],self.dl_dc[i],self.dl_at[i]=self.rnns[i].backward(self.softmax.backward(true_label[i],
                                                                                                                               self.preds[i]),
-                                  self.loss(true_label[i],self.preds[i]))   #the last element returend is THE gradient
+                                                        self.loss(true_label[i],self.preds[i]))   #the last element returend is THE gradient
     
     def update_param(self,lr):
         #lets update the params
