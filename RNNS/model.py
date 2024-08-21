@@ -13,14 +13,15 @@ class Model:
         self.loss=Loss()
 
         #for building the neural network
+        self.n_layers=n_layers
         self.rnns=[]
         
-    def forward(self,inputs):
-        self.prev=np.zeros_like(self.W)  #at-1
+    def forward(self,inputs):    #one hot encoded list of inputs
+        self.prev=np.zeros_like(self.W)  #at-1  first RNN 
         self.preds=[]  #for accumulation
 
-        for i in range(len(self.rnns)):
-            self.logits,self.h=self.rnns[i].forward(self.prev,inputs)
+        for i in range(len(self.n_layers)):
+            self.logits,self.h=self.rnns.append(self.rnn.forward(self.prev,inputs[i]))   #assigning each data into one RNN
             self.probs=self.softmax(self.logits)
             self.prev=self.h
             
@@ -30,7 +31,7 @@ class Model:
         return self.preds   
     
     def cal_loss(self,true_value):   #loss value of single preds
-        return self.loss(self.preds,true_value)
+        return self.loss.forward(self.preds,true_value)
     
 
     def backward(self,true_label):        
